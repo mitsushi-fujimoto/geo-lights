@@ -8,8 +8,8 @@ function App() {
   const handleChange = (event) => {
     setMode(event.target.checked);
   };
-  const stateMode = React.useRef(); // ステート取得のためにオブジェクトを作成
-  stateMode.current = mode; // modeのステートをcurrentに保持
+  const stateMode = React.useRef(); // Create an object to obtain state
+  stateMode.current = mode; // Keep the state of mode in current
   const [open, setOpen] = React.useState(false);
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') return;
@@ -35,7 +35,7 @@ function App() {
         anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
       >
         <Alert icon={false} onClose={handleClose} variant="filled" severity="success"
-          sx={{width:'200px','& .MuiAlert-message':{textAlign:'center',width:'inherit'}}}
+          sx={{width:'200px', '& .MuiAlert-message':{textAlign:'center', width:'inherit'}}}
         >
           <strong>{message}</strong>
         </Alert>
@@ -43,60 +43,60 @@ function App() {
     </div>
   );
 
-  // GeoGebra初期化関数
+  // Initialization function for Geogebra component
   function ggbOnInit() {
     const ggbApplet = window.ggbApplet;
-    ggbApplet.evalCommand('SetPerspective("2")'); // AlgebraViewを非表示("2"はGraphicsViewを指す)
-    ggbApplet.setAxesVisible(false,false); // 座標軸を非表示
-    ggbApplet.setGridVisible(false); // グリッドを非表示
-    ggbApplet.setCoordSystem(-2,12,-12,1.5); // 原点位置を左上に設定
-    ggbApplet.evalCommand('SetAxesRatio(1,1)'); // 座標軸の縦横比を1:1に
-    ggbApplet.enableShiftDragZoom(false); // グラフィックスビューのドラッグ&ズームを禁止
-    createCell(); // セルを表示
-    ggbApplet.registerClickListener(ListenerC); // クリックイベントのリスナーを指定
+    ggbApplet.evalCommand('SetPerspective("G")'); // Display only GraphicsView
+    ggbApplet.setAxesVisible(false,false); // Hide the coordinate axes
+    ggbApplet.setGridVisible(false); // Hide the grid of GraphicsView
+    ggbApplet.setCoordSystem(-2,12,-12,1.5); // Set the origin position to the top left
+    ggbApplet.evalCommand('SetAxesRatio(1,1)'); // Set the aspect ratio of the coordinate axes to 1:1
+    ggbApplet.enableShiftDragZoom(false); // Disable drag & zoom in GraphicsView
+    createCell(); // Create the 5x5 grid
+    ggbApplet.registerClickListener(ListenerC); // Specify the click event listener
   }
 
-  // ライツアウトの盤面を生成
+  // Create the 5x5 grid of Lights Out
   function createCell() {
     const ggbApplet = window.ggbApplet;
-    // 5x5格子点P_iの作成
+    // Create 5x5 grid points P_i
     ggbApplet.evalCommand('Execute(Sequence("P"+(i)+"=("+2*Mod(i,5)+","+(-2*Div(i,5))+")",i,0,24))');
-    // 格子点を左上に持つセルq_iをPolygonで作成
+    // Create cell q_i with 'Polygon' that has a grid point in the upper left
     ggbApplet.evalCommand('Execute(Sequence("q"+(i)+"=Polygon(P"+(i)+",P"+(i)+"+(0,-2),P"+(i)+"+(2,-2),P"+(i)+"+(2,0))",i,0,24))');
     for (var i = 0; i < ggbApplet.getObjectNumber(); i++) {
       var obj = ggbApplet.getObjectName(i);
-      ggbApplet.setLabelVisible(obj,false); // オブジェクトのラベルは非表示
+      ggbApplet.setLabelVisible(obj,false); // Hide labels of objects
       if (ggbApplet.getObjectType(obj) === "point") { 
-        ggbApplet.setVisible(obj,false); // 点は非表示
+        ggbApplet.setVisible(obj,false); // Hide point objects
       } else if (ggbApplet.getObjectType(obj) !== "quadrilateral") { 
-        ggbApplet.setFixed(obj,true,false); // セルq_i以外は選択できないように
+        ggbApplet.setFixed(obj,true,false); // Make objects other than q_i unselectable
       } else {
-        ggbApplet.setFixed(obj,true,true); // ドラッグでセルが動かないように固定化
-        ggbApplet.evalCommand("SetDynamicColor("+(obj)+",0,0,0,0.2)"); // セルのデフォルトカラーを白に
+        ggbApplet.setFixed(obj,true,true); // Fix cells so they cannot be dragged
+        ggbApplet.evalCommand("SetDynamicColor("+(obj)+",0,0,0,0.2)"); // Set default cell color
       }
     }
   }
 
-  // クリックされた場所にあるセルの色を変更
-  function ListenerC(obj) { // objにはクリックされたオブジェクト名が渡される
+  // Click event listener for cells
+  function ListenerC(obj) { // obj is the name of the clicked object
     const ggbApplet = window.ggbApplet;
-    if (obj.startsWith('q')) { // セルq_iがクリックされたら
+    if (obj.startsWith('q')) { // If cell q_i is clicked
       reverseColor(obj);
       var num = parseInt(obj.substring(1));
-      if (stateMode.current === true) { // Playモードなら十字に色反転
+      if (stateMode.current === true) { // If in Play mode, invert colors in a cross shape
         if ((num-1)%5 !== 4) reverseColor("q"+(num-1));
         if ((num+1)%5 !== 0) reverseColor("q"+(num+1));
         if ((num-5) >= 0) reverseColor("q"+(num-5));
         if ((num+5) < 25) reverseColor("q"+(num+5));
       }
-      // クリックしたセルに解答の白丸がある場合は削除
+      // If the clicked cell has a white circle, remove it
       if (ggbApplet.isDefined("AP"+(num))) {
         ggbApplet.deleteObject("AP"+(num));
       }
     }
   }
 
-  // セルの色を反転
+  // Invert the color of the cell
   function reverseColor(obj) {
     const ggbApplet = window.ggbApplet;
     if (ggbApplet.getColor(obj) === "#000000") {
@@ -106,11 +106,11 @@ function App() {
     }
   }
 
-  // 可解性の判定
+  // Solvability check of Lights Out
   function judgement() {
     const ggbApplet = window.ggbApplet;
-    var numlist = []; // 点灯セルの番号を保存する配列
-    // 解答の白丸を削除
+    var numlist = []; // Array to store the indices of the lit cells
+    // Remove the white circles corresponding to the solution
     for (var i = 0; i < 25; i++) {
       if (ggbApplet.isDefined("AP"+(i))) {
         ggbApplet.deleteObject("AP"+(i));
@@ -119,24 +119,26 @@ function App() {
     for (i = 0; i < ggbApplet.getObjectNumber(); i++) {
       var obj = ggbApplet.getObjectName(i);
       if (ggbApplet.getObjectType(obj) === "quadrilateral" && ggbApplet.getColor(obj) !== "#000000") {
-        numlist.push(obj.substring(1));
+        numlist.push(obj.substring(1)); // Store the index of q_i in numlist
       }
     }
     var len = numlist.length;
-    var numarray = new Uint8Array(new Uint32Array(numlist).buffer); // C関数に渡す配列を準備
-    createModule().then(mod => { // solvable関数の呼び出し
-      var result = mod.ccall('solvable','number',['array','number'],[numarray,len]);
+    // Prepare the array for the C function
+    var numarray = new Uint8Array(new Uint32Array(numlist).buffer);
+    createModule().then(mod => {
+      // Execute the C function 'solvable'
+      var result = mod.ccall('solvable', 'number', ['array','number'], [numarray, len]);
       if (result === 1) setMessage('Solvable!');
       else setMessage('Unsolvable!');
       setOpen(true);
     });
   }
 
-  // ライツアウトの求解
+  // Find the solution of Lights Out
   function solution() {
     const ggbApplet = window.ggbApplet;
-    var numlist = []; // 点灯セルの番号を保存する配列
-    // 解答の白丸を削除
+    var numlist = []; // Array to store the indices of the lit cells
+    // Remove the white circles corresponding to the solution
     for (var i = 0; i < 25; i++) {
       if (ggbApplet.isDefined("AP"+(i))) {
         ggbApplet.deleteObject("AP"+(i));
@@ -145,20 +147,23 @@ function App() {
     for (i = 0; i < ggbApplet.getObjectNumber(); i++) {
       var obj = ggbApplet.getObjectName(i);
       if (ggbApplet.getObjectType(obj) === "quadrilateral" && ggbApplet.getColor(obj) !== "#000000") {
-        numlist.push(parseInt(obj.substring(1))); // q_iの添え字番号iを整数に変換してnumlistに保存
+        numlist.push(parseInt(obj.substring(1))); // Store the index of q_i in numlist
       }
     }
     var len = numlist.length;
-    var numarray = new Uint8Array(new Uint32Array(numlist).buffer); // C関数に渡す配列を準備
-    createModule().then(mod => { // solve関数の呼び出し
+    // Prepare the array for the C function
+    var numarray = new Uint8Array(new Uint32Array(numlist).buffer);
+    createModule().then(mod => {
+      // Execute the C function 'solve'
       var ptr = mod.ccall('solve', 'number', ['array','number'], [numarray, len]);
-      var rslt = new Int32Array(mod.HEAP32.buffer, ptr, 25); // JavaScriptの配列に変換
-      if (rslt[0] === -1) { // 非可解な場合
+      // Convert the result to a JavaScript array
+      var rslt = new Int32Array(mod.HEAP32.buffer, ptr, 25);
+      if (rslt[0] === -1) { // Unsolvable case
         setMessage('Unsolvable!');
         setOpen(true);
-      } else { // 可解な場合
+      } else { // Solvable case
         for (i = 0; i < 25; i++) {
-          if (rslt[i] === 1){ // 解答の白丸をセルに付加
+          if (rslt[i] === 1) { // Add white circles on the cells for the solution
             var x = ggbApplet.getXcoord("P"+(i))+1;
             var y = ggbApplet.getYcoord("P"+(i))-1;
             ggbApplet.evalCommand("AP"+(i)+"=("+(x)+","+(y)+")");
@@ -172,16 +177,16 @@ function App() {
     });
   }
 
-  // ゲームの初期化
+  // Initialization function for the game
   function init() {
     const ggbApplet = window.ggbApplet;
-    // 解答の白丸を削除
+    // Remove the white circles corresponding to the solution
     for (var i = 0; i < 25; i++) {
       if (ggbApplet.isDefined("AP"+(i))) {
         ggbApplet.deleteObject("AP"+(i));
       }
     }
-    // 色つきセルを白に
+    // Reset the color of all cells to the default color
     for (i = 0; i < ggbApplet.getObjectNumber(); i++) {
       var obj = ggbApplet.getObjectName(i);
       if (ggbApplet.getObjectType(obj) === "quadrilateral" && ggbApplet.getColor(obj) !== "#000000") {
