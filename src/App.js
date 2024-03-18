@@ -63,8 +63,8 @@ function App() {
     ggbApplet.evalCommand('Execute(Sequence("P"+(i)+"=("+2*Mod(i,5)+","+(-2*Div(i,5))+")",i,0,24))');
     // Create cell q_i with 'Polygon' that has a grid point in the upper left
     ggbApplet.evalCommand('Execute(Sequence("q"+(i)+"=Polygon(P"+(i)+",P"+(i)+"+(0,-2),P"+(i)+"+(2,-2),P"+(i)+"+(2,0))",i,0,24))');
-    for (var i = 0; i < ggbApplet.getObjectNumber(); i++) {
-      var obj = ggbApplet.getObjectName(i);
+    for (let i = 0; i < ggbApplet.getObjectNumber(); i++) {
+      const obj = ggbApplet.getObjectName(i);
       ggbApplet.setLabelVisible(obj,false); // Hide labels of objects
       if (ggbApplet.getObjectType(obj) === "point") { 
         ggbApplet.setVisible(obj,false); // Hide point objects
@@ -82,7 +82,7 @@ function App() {
     const ggbApplet = window.ggbApplet;
     if (obj.startsWith('q')) { // If cell q_i is clicked
       reverseColor(obj);
-      var num = parseInt(obj.substring(1));
+      const num = parseInt(obj.substring(1));
       if (stateMode.current === true) { // If in Play mode, invert colors in a cross shape
         if ((num-1)%5 !== 4) reverseColor("q"+(num-1));
         if ((num+1)%5 !== 0) reverseColor("q"+(num+1));
@@ -109,25 +109,24 @@ function App() {
   // Solvability check of Lights Out
   function judgement() {
     const ggbApplet = window.ggbApplet;
-    var numlist = []; // Array to store the indices of the lit cells
+    const numlist = []; // Array to store the indices of the lit cells
     // Remove the white circles corresponding to the solution
-    for (var i = 0; i < 25; i++) {
+    for (let i = 0; i < 25; i++) {
       if (ggbApplet.isDefined("AP"+(i))) {
         ggbApplet.deleteObject("AP"+(i));
       }
     }
-    for (i = 0; i < ggbApplet.getObjectNumber(); i++) {
-      var obj = ggbApplet.getObjectName(i);
+    for (let i = 0; i < ggbApplet.getObjectNumber(); i++) {
+      const obj = ggbApplet.getObjectName(i);
       if (ggbApplet.getObjectType(obj) === "quadrilateral" && ggbApplet.getColor(obj) !== "#000000") {
         numlist.push(obj.substring(1)); // Store the index of q_i in numlist
       }
     }
-    var len = numlist.length;
     // Prepare the array for the C function
-    var numarray = new Uint8Array(new Uint32Array(numlist).buffer);
+    const numarray = new Uint8Array(new Uint32Array(numlist).buffer);
     createModule().then(mod => {
       // Execute the C function 'solvable'
-      var result = mod.ccall('solvable', 'number', ['array','number'], [numarray, len]);
+      const result = mod.ccall('solvable', 'number', ['array','number'], [numarray, numlist.length]);
       if (result === 1) setMessage('Solvable!');
       else setMessage('Unsolvable!');
       setOpen(true);
@@ -137,35 +136,34 @@ function App() {
   // Find the solution of Lights Out
   function solution() {
     const ggbApplet = window.ggbApplet;
-    var numlist = []; // Array to store the indices of the lit cells
+    const numlist = []; // Array to store the indices of the lit cells
     // Remove the white circles corresponding to the solution
-    for (var i = 0; i < 25; i++) {
+    for (let i = 0; i < 25; i++) {
       if (ggbApplet.isDefined("AP"+(i))) {
         ggbApplet.deleteObject("AP"+(i));
       }
     }
-    for (i = 0; i < ggbApplet.getObjectNumber(); i++) {
-      var obj = ggbApplet.getObjectName(i);
+    for (let i = 0; i < ggbApplet.getObjectNumber(); i++) {
+      const obj = ggbApplet.getObjectName(i);
       if (ggbApplet.getObjectType(obj) === "quadrilateral" && ggbApplet.getColor(obj) !== "#000000") {
         numlist.push(parseInt(obj.substring(1))); // Store the index of q_i in numlist
       }
     }
-    var len = numlist.length;
     // Prepare the array for the C function
-    var numarray = new Uint8Array(new Uint32Array(numlist).buffer);
+    const numarray = new Uint8Array(new Uint32Array(numlist).buffer);
     createModule().then(mod => {
       // Execute the C function 'solve'
-      var ptr = mod.ccall('solve', 'number', ['array','number'], [numarray, len]);
+      const ptr = mod.ccall('solve', 'number', ['array','number'], [numarray, numlist.length]);
       // Convert the result to a JavaScript array
-      var rslt = new Int32Array(mod.HEAP32.buffer, ptr, 25);
+      const rslt = new Int32Array(mod.HEAP32.buffer, ptr, 25);
       if (rslt[0] === -1) { // Unsolvable case
         setMessage('Unsolvable!');
         setOpen(true);
       } else { // Solvable case
-        for (i = 0; i < 25; i++) {
+        for (let i = 0; i < 25; i++) {
           if (rslt[i] === 1) { // Add white circles on the cells for the solution
-            var x = ggbApplet.getXcoord("P"+(i))+1;
-            var y = ggbApplet.getYcoord("P"+(i))-1;
+            const x = ggbApplet.getXcoord("P"+(i))+1;
+            const y = ggbApplet.getYcoord("P"+(i))-1;
             ggbApplet.evalCommand("AP"+(i)+"=("+(x)+","+(y)+")");
             ggbApplet.setLabelVisible("AP"+(i),false);
             ggbApplet.setFixed("AP"+(i),true,false);
@@ -181,14 +179,14 @@ function App() {
   function init() {
     const ggbApplet = window.ggbApplet;
     // Remove the white circles corresponding to the solution
-    for (var i = 0; i < 25; i++) {
+    for (let i = 0; i < 25; i++) {
       if (ggbApplet.isDefined("AP"+(i))) {
         ggbApplet.deleteObject("AP"+(i));
       }
     }
     // Reset the color of all cells to the default color
-    for (i = 0; i < ggbApplet.getObjectNumber(); i++) {
-      var obj = ggbApplet.getObjectName(i);
+    for (let i = 0; i < ggbApplet.getObjectNumber(); i++) {
+      const obj = ggbApplet.getObjectName(i);
       if (ggbApplet.getObjectType(obj) === "quadrilateral" && ggbApplet.getColor(obj) !== "#000000") {
         ggbApplet.evalCommand("SetDynamicColor("+(obj)+",0,0,0,0.2)");
       }
