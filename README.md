@@ -23,8 +23,8 @@ The app built by the above process is available at [geo-lights](https://mitsushi
 3. Change the mode to 'Play', then solve the puzzle.
 4. If you want to know the solution, click the Solve button. White circles will be displayed on the cells that should be clicked.
 ## Screenshots
-<p>
-![geo-lights1](https://github.com/mitsushi-fujimoto/geo-lights/assets/86606177/ad29b10d-56ca-45cf-830a-941d46f19c9c)
-![geo-lights2](https://github.com/mitsushi-fujimoto/geo-lights/assets/86606177/3925e311-d50d-4774-b765-050e721d0a86)
-![geo-lights3](https://github.com/mitsushi-fujimoto/geo-lights/assets/86606177/de5f7e86-1285-4a5e-b7cd-651f243d0cc6)
+<p align="center">
+  <img src="./images/geo-lights1.png" alt="geo-lights1" width="30%">
+  <img src="./images/geo-lights2.png" alt="geo-lights2" width="30%">
+  <img src="./images/geo-lights3.png" alt="geo-lights3" width="30%">
 </p>
