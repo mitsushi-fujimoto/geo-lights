@@ -17,7 +17,7 @@ python3 -m http.server &
 ```
 Then, access http://localhost:8000/build/ from a web browser.
 ## How to use this app
-1. Change the mode to `Setup', then create a pattern. In `Setup' mode, only the clicked cell will be inverted.
+1. Change the mode to 'Setup', then create a pattern. In 'Setup' mode, only the clicked cell will be inverted.
 2. Click the Judge button to determine solvability. The result will be displayed in a snackbar.
-3. Change the mode to `Play', then solve the puzzle.
+3. Change the mode to 'Play', then solve the puzzle.
 4. If you want to know the solution, click the Solve button. White circles will be displayed on the cells that should be clicked.
