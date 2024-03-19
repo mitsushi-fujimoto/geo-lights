@@ -24,7 +24,7 @@ The app built by the above process is available at [geo-lights](https://mitsushi
 4. If you want to know the solution, click the Solve button. White circles will be displayed on the cells that should be clicked.
 ## Screenshots
 <p>
-![geo-lights1](https://github.com/mitsushi-fujimoto/geo-lights/assets/86606177/d6507962-fbe0-4431-ab21-d1f1c10026bb)
-![geo-lights2](https://github.com/mitsushi-fujimoto/geo-lights/assets/86606177/78389cae-031f-48c2-8c20-15117822ab39)
-![geo-lights3](https://github.com/mitsushi-fujimoto/geo-lights/assets/86606177/135cac90-97dd-43c2-acbb-be2bf6592b1f)
+![geo-lights1](https://github.com/mitsushi-fujimoto/geo-lights/assets/86606177/ad29b10d-56ca-45cf-830a-941d46f19c9c)
+![geo-lights2](https://github.com/mitsushi-fujimoto/geo-lights/assets/86606177/3925e311-d50d-4774-b765-050e721d0a86)
+![geo-lights3](https://github.com/mitsushi-fujimoto/geo-lights/assets/86606177/de5f7e86-1285-4a5e-b7cd-651f243d0cc6)
 </p>
