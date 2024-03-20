@@ -1,5 +1,5 @@
 # Lights Out Puzzle App with GeoGebra and WebAssembly
-This is the repository for a web app of the mathematical puzzle `Lights Out'. It uses react-geogebra/React for the UI and C language/WebAssembly for the computational engine.
+This is the repository for a web app of the mathematical puzzle 'Lights Out'. It uses react-geogebra/React for the UI and C language/WebAssembly for the computational engine.
 
 ## How to build this app
 ```bash
